@@ -1,0 +1,38 @@
+.search-and-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.search-field {
+    width: 90%;
+}
+
+mat-form-field,
+textarea {
+    width: 100% !important;
+}
+
+mat-grid-tile {
+    background: lightblue;
+  }
+
+  #grid-row {
+    margin-top: 20px;
+    margin-right: 3px;
+    margin-left: 3px;
+  }
+
+  #add-button{
+    padding-top: -50px;
+    margin-top: -20px;
+  }
+
+  #filter-field{
+    margin-left: 10px;
+  }
+
+  #table-container{
+    box-shadow: none !important;
+  }

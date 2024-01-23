@@ -24,7 +24,18 @@ import { environment } from 'src/environments/environment';
   templateUrl: './abouts.component.html',
   styleUrls: ['./abouts.component.css'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule, MatMenuModule, MatButtonModule, MatDividerModule, MatIconModule, EditorModule]
+  imports: [FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatIconModule,
+    EditorModule]
 })
 export class AboutsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['title', 'description', 'actions'];
@@ -54,9 +65,9 @@ export class AboutsComponent implements OnInit, AfterViewInit {
         { value: 'Email', title: 'Email' },
       ],
       ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-    
+
     };
-   }
+  }
 
   ngOnInit(): void {
     this.createAboutAddForm(); // Add this line
@@ -66,7 +77,7 @@ export class AboutsComponent implements OnInit, AfterViewInit {
 
   }
 
-  showToast(title:string, message: string, toastType: boolean) {
+  showToast(title: string, message: string, toastType: boolean) {
     if (toastType) {
       this.toastr.success(message, title);
     } else {
@@ -74,8 +85,8 @@ export class AboutsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  showErrorToast(title:string, message: string){
-    this.toastr.error(message,title);
+  showErrorToast(title: string, message: string) {
+    this.toastr.error(message, title);
   }
 
   extraLarge(exlargeModal: any) {
@@ -147,10 +158,10 @@ export class AboutsComponent implements OnInit, AfterViewInit {
         // Close the modal
         this.modalRef?.hide();
         this.clearFormGroup(this.aboutForm);
-        this.showToast("Hakkımızda Ekleme İşlemi","Hakkımızda ekleme işlemi başarılı.", true);
+        this.showToast("Hakkımızda Ekleme İşlemi", "Hakkımızda ekleme işlemi başarılı.", true);
       }, error => {
         //	this.alertifyService.error("Bu müşteri veritabanında mevcut.");
-        this.showErrorToast("Eklemek istediğiniz hakkımızda verisi veritabanında mevcut.","");
+        this.showErrorToast("Eklemek istediğiniz hakkımızda verisi veritabanında mevcut.", "");
       })
     }
   }
@@ -166,10 +177,10 @@ export class AboutsComponent implements OnInit, AfterViewInit {
         this.about = new About();
         this.modalRef?.hide();
         this.clearFormGroup(this.aboutForm);
-        this.showToast("Hakkımızda Güncelleme İşlemi","Hakkımızda güncelleme işlemi başarılı.", false);
+        this.showToast("Hakkımızda Güncelleme İşlemi", "Hakkımızda güncelleme işlemi başarılı.", false);
       }, error => {
         //	this.alertifyService.error("Bu müşteri veritabanında mevcut.");
-        this.showErrorToast("Güncelleme işlemi başarısız.","");
+        this.showErrorToast("Güncelleme işlemi başarısız.", "");
       })
     }
   }
@@ -245,16 +256,16 @@ export class AboutsComponent implements OnInit, AfterViewInit {
         group.get(key).setValue("");
       if (key == 'description')
         group.get(key).setValue("");
-        if (key == 'createdDate')
+      if (key == 'createdDate')
         group.get(key).setValue(null);
-        if (key == 'updatedDate')
+      if (key == 'updatedDate')
         group.get(key).setValue(null);
-        if (key == 'isModified')
+      if (key == 'isModified')
         group.get(key).setValue(false);
-        if (key == 'isDeleted')
+      if (key == 'isDeleted')
         group.get(key).setValue(false);
     });
     this.modalRef?.hide();
   }
-  
+
 }

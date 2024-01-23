@@ -9,7 +9,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { DropzoneConfigInterface, DropzoneModule } from 'ngx-dropzone-wrapper';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -37,7 +36,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
-    MatGridListModule,
     EditorModule,
     DropzoneModule]
 })
@@ -146,6 +144,11 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   largeModal(largeDataModal: any, productId?: string) {
     this.currentProductId = productId;
     this.largeModalRef = this.modalService.show(largeDataModal, { class: 'modal-lg' });
+  }
+
+  closeExtraLargeModal(){
+    this.modalRef?.hide();
+    this.clearProductModalContent();
   }
 
   closeLargeModal(){
@@ -432,6 +435,49 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       });
   }
 
+  deleteProductImage(productImageId: string, productId: string) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger ms-2'
+      },
+      buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons
+      .fire({
+        title: 'Emin misiniz?',
+        text: 'Silme işlemi geri alınamaz!',
+        icon: 'warning',
+        confirmButtonText: 'Evet, sil!',
+        cancelButtonText: 'Hayır, iptal et!',
+        showCancelButton: true
+      })
+      .then(result => {
+        if (result.value) {
+          this.productAndImageService.deleteProductImage(productImageId).subscribe(data => {
+            this.productImageList = this.productImageList.filter(x => x.id != productImageId);
+            this.getProductImagesByProductId(productId);
+            swalWithBootstrapButtons.fire(
+              'Silindi!',
+              'Silme işlemi başarılı.',
+              'success'
+            );
+          })
+
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            'İptal edildi.',
+            'Silme işlemi iptal edildi.',
+            'error'
+          );
+        }
+      });
+  }
+
   createProductAddForm() {
     this.productForm = this.fb.group({
       id: [null],
@@ -519,8 +565,11 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     this.productImageForm.reset();
     this.uploadedFiles = [];
     this.currentProductImageId = null;
-  
     // Change detection'ı manuel olarak tetikle
     this.cdr.detectChanges();
+  }
+
+  clearProductModalContent(){
+    this.productImageList = [];
   }
 }

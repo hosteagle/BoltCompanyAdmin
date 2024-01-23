@@ -44,17 +44,20 @@ export class ProductsAndImagesService {
     return this.httpClient.get<ProductImagesDto>(environment.apiUrl + '/ProductImages', { headers: this.headers })
   }
 
+  getProductImageListByProductId(productId: string): Observable<ProductImagesDto> {
+    return this.httpClient.get<ProductImagesDto>(`${environment.apiUrl}/ProductImages/pid/${productId}`, { headers: this.headers })
+  }
+
   getProductImageById(id: string): Observable<ProductImageDto> {
     return this.httpClient.get<ProductImageDto>(`${environment.apiUrl}/ProductImages/${id}`, { headers: this.headers })
   }
 
-  addProductImage(productImage: ProductImage): Observable<any> {
-
-    return this.httpClient.post(environment.apiUrl + '/ProductImages/', productImage, { responseType: 'text', headers: this.headers });
+  addProductImage(formData: FormData, productImage: ProductImage): Observable<any> {
+    return this.httpClient.post(environment.apiUrl + '/ProductImages/', formData, { headers: this.headers });
   }
-
-  updateProductImage(productImage: ProductImage): Observable<any> {
-    return this.httpClient.put(environment.apiUrl + '/ProductImages/', productImage, { responseType: 'text', headers: this.headers });
+  
+  updateProductImage(formData: FormData): Observable<any> {
+    return this.httpClient.put(environment.apiUrl + '/ProductImages/', formData, { responseType: 'text', headers: this.headers });
 
   }
 

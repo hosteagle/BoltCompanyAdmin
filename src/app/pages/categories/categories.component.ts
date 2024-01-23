@@ -26,7 +26,7 @@ import Swal from 'sweetalert2';
   imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule, MatMenuModule, MatButtonModule, MatDividerModule, MatIconModule, EditorModule]
 })
 export class CategoriesComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['id', 'title', 'actions'];
+  displayedColumns: string[] = ['title', 'actions'];
   dataSource: MatTableDataSource<any>;
   modalRef?: BsModalRef;
   categoryForm: FormGroup;

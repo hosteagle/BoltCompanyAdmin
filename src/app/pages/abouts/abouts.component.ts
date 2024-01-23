@@ -27,7 +27,7 @@ import { environment } from 'src/environments/environment';
   imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule, MatMenuModule, MatButtonModule, MatDividerModule, MatIconModule, EditorModule]
 })
 export class AboutsComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['id', 'title', 'description', 'actions'];
+  displayedColumns: string[] = ['title', 'description', 'actions'];
   dataSource: MatTableDataSource<any>;
   modalRef?: BsModalRef;
   aboutForm: FormGroup;

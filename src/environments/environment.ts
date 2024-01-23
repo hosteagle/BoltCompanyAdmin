@@ -16,6 +16,7 @@ export const environment = {
     measurementId: ""
   },
   apiUrl: 'https://localhost:7170/api',
+  serverFilePath: 'https://localhost:7170/uploads',
   allowedDomin: 'https://localhost:7170',
   tinymceEditorApiKey: '82fr55hkhbf6r3uarh4lirpr2blznzn9atm5eitgbruchvlu'
 };

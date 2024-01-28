@@ -41,6 +41,8 @@ import { AuthenticationEffects } from './store/Authentication/authentication.eff
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { JwtModule } from '@auth0/angular-jwt';
+import { SafeUrlPipe } from './pipes/safe-url.pipe';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 if (environment.defaultauth === 'firebase') {
   initFirebaseBackend(environment.firebaseConfig);
 } else {
@@ -56,6 +58,7 @@ export function createTranslateLoader(http: HttpClient): any {
   declarations: [
     AppComponent,
     CyptolandingComponent,
+    SafeUrlPipe
   ],
   imports: [
     BrowserModule,

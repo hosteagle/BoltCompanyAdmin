@@ -52,7 +52,7 @@ export class ProductsAndImagesService {
     return this.httpClient.get<ProductImageDto>(`${environment.apiUrl}/ProductImages/${id}`, { headers: this.headers })
   }
 
-  addProductImage(formData: FormData, productImage: ProductImage): Observable<any> {
+  addProductImage(formData: FormData): Observable<any> {
     return this.httpClient.post(environment.apiUrl + '/ProductImages/', formData, { headers: this.headers });
   }
   

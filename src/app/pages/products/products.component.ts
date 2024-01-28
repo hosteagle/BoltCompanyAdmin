@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -19,6 +19,9 @@ import { environment } from 'src/environments/environment';
 import { ProductsAndImagesService } from './productsAndImages.service';
 import Swal from 'sweetalert2';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { CategoriesService } from '../categories/categories.service';
+import { Category } from '../categories/categories.model';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-products',
@@ -29,6 +32,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
@@ -37,7 +41,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     MatDividerModule,
     MatIconModule,
     EditorModule,
-    DropzoneModule]
+    DropzoneModule,
+  ]
 })
 export class ProductsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['name', 'actions'];
@@ -49,8 +54,10 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   productImageForm: FormGroup;
   product: Product;
   productImage: ProductImage = new ProductImage();
-  productList: Product[];
-  productImageList: ProductImage[];
+  productList: Product[] = [];
+  productImageList: ProductImage[] = [];
+  categoryList: Category[];
+  files: File[] = [];
   productsDto: ProductsDto;
   productImagesDto: ProductImagesDto;
   productDto: ProductDto = { product: null, message: '', statusCode: '' };
@@ -59,16 +66,16 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   apiKey: string = environment.tinymceEditorApiKey;
   serverFilePath: string = environment.serverFilePath;
   editorConfig: any;
-  files: File[] = [];
   currentProductId: string;
   currentProductImageId: string;
+  selectedCategory: string;
 
   @ViewChild('exlargeModal') exlargeModal: any; // Reference to the modal template  
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
 
-  constructor(private cdr: ChangeDetectorRef, private toastr: ToastrService, private productAndImageService: ProductsAndImagesService, private modalService: BsModalService, private fb: FormBuilder,private sanitizer: DomSanitizer) {
+  constructor(private cdr: ChangeDetectorRef, private toastr: ToastrService, private productAndImageService: ProductsAndImagesService,private categoriesService: CategoriesService, private modalService: BsModalService, private fb: FormBuilder,private sanitizer: DomSanitizer) {
     this.editorConfig = {
       plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
       toolbar: 'undo redo | blocks fontfamily fontsize | forecolor backcolor | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
@@ -82,6 +89,11 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
+    this.categoriesService.getCategoryList().subscribe(data => {
+      this.categoryList = data.categories;
+      console.log(this.categoryList,"clistt");
+      
+    });
     this.getProducts();
     this.createProductAddForm(); // Add this line
     this.createProductImageAddForm();
@@ -89,6 +101,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
   }
+
 
   // file upload
   public dropzoneConfig: DropzoneConfigInterface = {
@@ -284,12 +297,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     }
     formData.append('productId', productId);
 
-    const productImage: ProductImage = {
-      productId: productId,
-      files: files,
-    };
-  
-    this.productAndImageService.addProductImage(formData, productImage).subscribe(
+    this.productAndImageService.addProductImage(formData).subscribe(
       (data) => {
         // Success handling        
         this.productImage = new ProductImage();
@@ -331,47 +339,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       }
     );
   }
-  /* 
-  updateProductImage(isPrimary: boolean) {
-    if (this.productImageForm.valid) {
-      const formData = new FormData();
-      const productImage: ProductImage = this.productImageForm.value;
-  
-      // Append each file to the FormData
-      for (let i = 0; i < this.uploadedFiles.length; i++) {
-        formData.append('Files', this.uploadedFiles[i]);
-      }
-      
-      formData.append('productId', productImage.productId);
-  
-      // Add isPrimary value to the form data
-      formData.append('isPrimary', isPrimary.toString());
-  
-      // Check if productImage has an id (update operation) and add it to the form data
-      if (productImage.id) {
-        formData.append('productImageId', productImage.id);
-      }
-  
-      // Call the updateProductImage method in the service
-      this.productAndImageService.updateProductImage(formData,productImage).subscribe(
-        (data) => {
-          // Success handling        
-          this.productImage = new ProductImage();
-          // Close the modal
-          this.largeModalRef?.hide();
-          this.clearProductImageFormGroup(this.productImageForm);
-          this.showToast("Ürün Fotoğrafı Güncelleme İşlemi", "Ürün fotoğrafı güncelleme işlemi başarılı.", true);
-        },
-        (error) => {
-          this.showErrorToast(error.message, "");
-        }
-      );
-    } else {
-      // Handle form validation errors
-      // For example, show an error message or highlight the invalid fields
-    }
-  }
-*/
+
   updateProduct() {
     if (this.productForm.valid) {
       this.productAndImageService.updateProduct(this.product).subscribe(data => {
@@ -484,6 +452,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       name: ['', Validators.required],
       description: ['', Validators.required],
       specification: ['', Validators.required],
+      category: ['',Validators.required],
       createdDate: '',
       updatedDate: '',
       isModified: [false],

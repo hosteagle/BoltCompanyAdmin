@@ -1,1 +1,14 @@
-<p>files works!</p>
+<form>
+    <h4>mat-select-ctegory</h4>
+    <mat-form-field>
+      <mat-label>Favorite food</mat-label>
+      <mat-select [(ngModel)]="selectedCategory" name="category">
+        @for (category of categoryList; track category) {
+          <mat-option [value]="category.id">{{category.title}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <p> Selected food: {{selectedCategory}} </p>
+  </form>
+  <br>
+  <br>

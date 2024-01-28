@@ -30,6 +30,20 @@ export const MENU: MenuItem[] = [
         label: 'Dosyalar',
         icon: 'bx-calendar',
         link: '/dosyalar',
-    }
+    },
+
+
+    {
+        id: 6,
+        //label: 'MENUITEMS.APPS.TEXT',
+        label: 'Site Ayarları',
+        isTitle: true
+    },
+    {
+        id: 7,
+        label: 'Logo',
+        icon: 'bx-calendar',
+        link: '/logolar',
+    },
 ];
 

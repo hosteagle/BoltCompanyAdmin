@@ -7,6 +7,7 @@ import { CategoriesComponent } from './categories/categories.component';
 import { ProductsComponent } from './products/products.component';
 import { FilesComponent } from './files/files.component';
 import { authGuard } from '../core/guards/common/auth.guard';
+import { LogosComponent } from './site/logos/logos.component';
 
 const routes: Routes = [
   // { path: '', redirectTo: 'dashboard' },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'kategoriler', component:CategoriesComponent, canActivate:[authGuard] },
   { path: 'urunler', component:ProductsComponent, canActivate:[authGuard] },
   { path: 'dosyalar', component:FilesComponent, canActivate:[authGuard] },
+  { path: 'logolar', component:LogosComponent, canActivate:[authGuard] },
 ];
 
 @NgModule({

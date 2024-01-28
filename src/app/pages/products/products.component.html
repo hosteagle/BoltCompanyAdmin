@@ -34,24 +34,11 @@
                         <div class="mat-elevation-z8" id="table-container">
                             <table mat-table [dataSource]="dataSourceProduct" matSort>
 
-                                <!-- Progress Column -->
                                 <ng-container matColumnDef="name">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Başlık </th>
                                     <td mat-cell *matCellDef="let row"> {{row.name}} </td>
                                 </ng-container>
 
-                                <!-- Name Column
-                                <ng-container matColumnDef="description">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> İçerik </th>
-                                    <td mat-cell *matCellDef="let row" [innerHTML]="row.description"></td>
-                                </ng-container>
-
-                                <ng-container matColumnDef="specification">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Ürün Özellikleri </th>
-                                    <td mat-cell *matCellDef="let row" [innerHTML]="row.specification"></td>
-                                </ng-container> -->
-
-                                <!-- Fruit Column -->
                                 <ng-container matColumnDef="actions">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header> İşlemler </th>
                                     <td mat-cell *matCellDef="let row">
@@ -118,12 +105,21 @@
                 <form [formGroup]="productForm">
                     <div class="row">
                         <div class="col-12">
+                            <mat-form-field>
+                                <mat-label>Favorite food</mat-label>
+                                <mat-select id="category" formControlName="category" [(ngModel)]="selectedCategory" name="category" class="custom-select">
+                                    @for (category of categoryList; track category) {
+                                    <mat-option [value]="category.id">{{category.title}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
                             <mat-form-field appearance="fill">
                                 <mat-label>Başlık</mat-label>
                                 <input matInput id="name" name="name" formControlName="name" required>
-                                <div *ngIf="productForm.get('name').hasError('required')">
-                                    Title is required
-                                </div>
                             </mat-form-field>
                         </div>
                     </div>
@@ -132,10 +128,6 @@
                             <mat-label>İçerik</mat-label>
                             <editor apiKey="{{apiKey}}" [init]="editorConfig" id="description" name="description"
                                 formControlName="description" required></editor>
-
-                            <div *ngIf="productForm.get('description').hasError('required')">
-                                Description is required
-                            </div>
                         </div>
                     </div>
                     <br>
@@ -144,10 +136,6 @@
                             <mat-label>Ürün Özellikleri</mat-label>
                             <editor apiKey="{{apiKey}}" [init]="editorConfig" id="specification" name="specification"
                                 formControlName="specification" required></editor>
-
-                            <div *ngIf="productForm.get('specification').hasError('required')">
-                                Description is required
-                            </div>
                         </div>
                     </div>
                     <br>
@@ -201,8 +189,8 @@
                         style="display: flex; align-items: center; justify-content: center; height: 100%;">
                         <div class="card-img-top custom-size img-fluid"
                             style="max-width: 100%; max-height: 100%; overflow: hidden;">
-                            <img [src]="getSafeImageUrl(serverFilePath + '/' + productImage.imageName)"
-                                alt="{{serverFilePath}}/{{productImage.imageName}}"
+                            <img [src]="getSafeImageUrl(serverFilePath + '/products/' + productImage.imageName)"
+                                alt="{{serverFilePath}}/products/{{productImage.imageName}}"
                                 style="width: 100%; height: auto; object-fit: contain;">
                         </div>
                     </div>
